@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="#" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha1/0.5.0/sha1.min.js" integrity="sha512-EFzGVA89PL0FHNynzXujXq1zDkulwVPGqFZJv7oTikQsViGin3as+yndscV2zXLDZZHbg6TMtPS8bdsCs/IUuQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <title>Blockchain</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Chivo+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+        body, html{
+            width: 100%;
+            height: 100%;
+            background-color: lightyellow;
+            display: flex;
+            align-items: center;
+        }
+        .blockchain{
+            margin: auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        form{
+            width: 350px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            background-color: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 2px 2px 2px 3px lightgrey;
+        }
+        .form-control{
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 5px 20px;
+        }
+        label{
+            font-family: 'Chivo Mono';
+            vertical-align: middle;
+            display: flex;
+            align-items: center;
+        }
+        input{
+            height: 28px;
+            border-radius: 5px;
+            border: 2px solid grey;
+            padding: 0 6px;
+            font-family: 'Poppins';
+            font-size: 12px;
+            width: 210px;
+        }
+        .input-color{
+            background-color: #FFFDF2;
+        }
+    </style>
+</head>
+<body>
+    <div class="blockchain">
+        <form class="form-0" autocomplete="off">
+            <div class="form-control">
+                <label>Plaintext</label>
+                <input type="text" id="Plaintext-0" placeholder="Text Here">
+            </div>
+            <div class="form-control">
+                <label>SHA1</label>
+                <input type="text" id="SHA1-0" placeholder="SHA1" readonly>
+            </div>
+        </form>
+    </div>
+</body>
+<script>
+    let number = 0;
+    let new_form, inputs, plaintext, SHA1, form, blockchain, inner_form, arrow_box;
+    let arrow = '<svg height="61px" width="56px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 227.096 227.096" xml:space="preserve">'+
+'<g>'+
+	'<g>'+
+		'<polygon style="fill:grey;" points="152.835,39.285 146.933,45.183 211.113,109.373 0,109.373 0,117.723 211.124,117.723 146.933,181.902 152.835,187.811 227.096,113.55"/>'+
+	'</g>'+
+'</g>'+
+'</svg>';
+    
+
+    new_element();
+    function new_element(){
+        plaintext = document.querySelector(`#Plaintext-${number}`);
+        SHA1 = document.querySelector(`#SHA1-${number}`);
+        form = document.querySelector(`.form-${number}`);
+        blockchain = document.querySelector('.blockchain');
+        inner_form = form.innerHTML;
+
+        plaintext.addEventListener("focus", function(e){
+            plaintext.classList.add('input-color');
+        });
+        plaintext.addEventListener("blur", (e)=>addElement(e));
+    }
+    function addElement(e){
+        if(e.target.value != ''){
+                plaintext.setAttribute('disabled', 'disabled');
+                SHA1.value = sha1(e.target.value);
+                SHA1.classList.add('input-color');
+                new_form = document.createElement(`form`);
+                number++;
+                new_form.setAttribute('class' ,`form-${number}`);
+                new_form.setAttribute('autocomplete','off');
+                new_form.innerHTML = inner_form;
+                inputs = new_form.querySelectorAll('input');
+                inputs[0].id = `Plaintext-${number}`;
+                inputs[1].id = `SHA1-${number}`;
+                new_form.class = `form-${number}`;
+                arrow_box = document.createElement('div');
+                arrow_box.innerHTML = arrow;
+                blockchain.appendChild(arrow_box);
+                blockchain.appendChild(new_form);
+                plaintext.removeEventListener("input", function(e){
+                SHA1.value = sha1(e.target.value);
+                });
+                modifyElement();
+            }  
+    }
+    function modifyElement(){
+        form.parentNode.replaceChild(form.cloneNode(true), form);
+        new_element();
+    }
+
+</script>
+</html>
